@@ -1,7 +1,8 @@
 import os
 
-from A9 import inputs as inputs
-from A9 import regression
+from A10 import inputs as inputs
+from A10 import regression
+from A10 import sort
 
 
 def main():
@@ -18,7 +19,7 @@ def main():
 # from here can get to read, write or modify mode
 def mode_select():
     global file
-    mode = input("Please, select mode, read, write, modify or calculate linear regression (r/w/m/l):\n").lower()
+    mode = input("Please, select mode, read, write, modify, sort or calculate linear regression (r/w/m/s/l):\n").lower()
     if inputs.command_valid_input(['r', 'w', 'm', 'l'], mode):
         if mode == 'r':
             read_mode()
@@ -28,6 +29,9 @@ def mode_select():
         elif mode == 'l':
             file = open(path, 'r+')
             lin_regression(file)
+        elif mode == 's':
+            file = open(path, 'r+')
+            sort.merge_sort(file)
         else:
             file = open(path, 'r+')
             modify_mode()
