@@ -1,8 +1,8 @@
 import os
 
-from A10 import inputs as inputs
-from A10 import regression
-from A10 import sort
+from A11 import inputs as inputs
+from A11 import regression
+from A11 import sort
 
 
 def main():
@@ -19,8 +19,9 @@ def main():
 # from here can get to read, write or modify mode
 def mode_select():
     global file
-    mode = input("Please, select mode, read, write, modify, sort or calculate linear regression (r/w/m/s/l):\n").lower()
-    if inputs.command_valid_input(['r', 'w', 'm', 'l'], mode):
+    mode = input(
+        "Please, select mode, read, write, modify, sort&statistic or calculate linear regression (r/w/m/s/l):\n").lower()
+    if inputs.command_valid_input(['r', 'w', 'm', 'l', 's'], mode):
         if mode == 'r':
             read_mode()
         elif mode == 'w':
@@ -31,7 +32,8 @@ def mode_select():
             lin_regression(file)
         elif mode == 's':
             file = open(path, 'r+')
-            sort.merge_sort(file)
+            lines = sort.is_sort(file)
+            save_only_new(lines)
         else:
             file = open(path, 'r+')
             modify_mode()
@@ -165,6 +167,28 @@ def save_changes(lines):
         print("Wrong command.\n")
         save_changes(lines)
     save_file(save_path, lines)
+
+
+def save_only_new(lines):
+    save_path = ""
+    decision = input("Do you want to save data in file? y/n\n").lower()
+    if inputs.command_valid_input(['y', 'n'], decision):
+        if inputs.yes_no(decision):
+            save_path = inputs.is_valid_new_file()
+        else:
+            print('exit')
+            quit()
+    else:
+        print("Wrong command.\n")
+        save_only_new(lines)
+
+    file_ = open(save_path, 'w')
+    file_.truncate()
+    with file_ as f:
+        for line in lines:
+            f.write(line + '\n')
+        file_.close()
+
 
 
 # saves file in save_path

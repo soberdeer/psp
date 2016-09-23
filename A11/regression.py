@@ -4,23 +4,23 @@ from scipy import stats
 
 
 def x_sum(data_):
-    return sum([item[X] for item in data_])
+    return sum([item[1] for item in data_])
 
 
 def y_sum(data_):
-    return sum([item[Y] for item in data_])
+    return sum([item[2] for item in data_])
 
 
 def xx_sum(data_):
-    return double_sum(data_, X, X)
+    return double_sum(data_, 1, 1)
 
 
 def xy_sum(data_):
-    return double_sum(data_, X, Y)
+    return double_sum(data_, 1, 2)
 
 
 def yy_sum(data_):
-    return double_sum(data_, Y, Y)
+    return double_sum(data_, 2, 2)
 
 
 def double_sum(data_, param1, param2):
@@ -35,10 +35,10 @@ def y_avg(data_):
     return y_sum(data_) / len(data_)
 
 
-def calculate_b1(data_):
+def calculate_b1(data_, x):
     sum_ = xy_sum(data_)
     nom = sum_ - len(data_) * x_avg(data_) * y_avg(data_)
-    denom = sum([item[X] ** 2 for item in data_])
+    denom = sum([item[x] ** 2 for item in data_])
     denom -= len(data_) * x_avg(data_) ** 2
     return nom / denom
 
@@ -60,7 +60,7 @@ def calculate_b0(data_, b1):
 def variance(data_, b0, b1):
     sum_ = 0
     for i in range(0, len(data_)):
-        sum_ += float((float(data_[i][Y]) - b0 - (b1 * float(data_[i][X]))) ** 2)
+        sum_ += float((float(data_[i][2]) - b0 - (b1 * float(data_[i][1]))) ** 2)
     return float(sum_) * (1 / (len(data_) - 2))
 
 
@@ -82,11 +82,7 @@ def calc_alpha(percent):
 
 
 def linear_regression(data_):
-    global X
-    global Y
-    X = 0
-    Y = 1
-    b1 = calculate_b1(data_)
+    b1 = calculate_b1(data_, 1)
     b0 = calculate_b0(data_, b1)
     x_k = 644
     r_90 = __range__(data_, calc_alpha(90), x_k, b0, b1)
